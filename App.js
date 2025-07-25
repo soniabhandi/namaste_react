@@ -1,5 +1,51 @@
-const parent = React.createElement("h1", { id: "parent" }, "hello world");
+import React from "react";
+import ReactDOM from "react-dom/client";
+import Header from "./src/components/Header";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router";
+import Body from "./src/components/Body";
+import About from "./src/components/About";
+import Contact from "./src/components/Contact";
+import Error from "./src/components/Error";
+import Footer from "./src/components/Footer";
+import RestaurantMenu from "./src/components/RestaurantMenu";
 
-const root = ReactDOM.createRoot(document.getElementById("header"));
+const currYear = new Date().getFullYear();
 
-root.render(parent);
+const AppLayout = () => {
+  return (
+    <div className="app">
+      <Header />
+      <Outlet />
+      <Footer />
+    </div>
+  );
+};
+
+const appRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <AppLayout />,
+    children: [
+      {
+        path: "/",
+        element: <Body />,
+      },
+      {
+        path: "/about",
+        element: <About />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
+      {
+        path: "/restaurant/:resId",
+        element: <RestaurantMenu />,
+      },
+    ],
+    errorElement: <Error />,
+  },
+]);
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<RouterProvider router={appRouter} />);
