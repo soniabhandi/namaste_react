@@ -5,11 +5,13 @@ import { useState } from "react";
 import { resList } from "../utils/mockData";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router";
+import useOnlineStatus from "../utils/useOnlineStatus";
 
 const Body = () => {
   const [ListofRes, setListofRes] = useState([]);
   const [filteredRes, setfilteredRes] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const online = useOnlineStatus();
 
   useEffect(() => {
     fetchData();
@@ -22,6 +24,10 @@ const Body = () => {
     setfilteredRes(json?.recipes);
     console.log(json?.recipes);
   };
+
+  if (online === false) {
+    return <h1>You are offline, Please check your internet connection!!</h1>;
+  }
 
   return ListofRes?.length === 0 ? (
     <Shimmer />
