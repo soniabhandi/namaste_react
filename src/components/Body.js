@@ -4,6 +4,7 @@ import RestaurantCard from "./RestaurantCard";
 import { useState } from "react";
 import { resList } from "../utils/mockData";
 import Shimmer from "./Shimmer";
+import { Link } from "react-router";
 
 const Body = () => {
   const [ListofRes, setListofRes] = useState([]);
@@ -15,11 +16,11 @@ const Body = () => {
   }, []);
 
   const fetchData = async () => {
-    const apiCall = await fetch("https://jsonplaceholder.typicode.com/todos/1");
+    const apiCall = await fetch("https://dummyjson.com/recipes");
     const json = await apiCall.json();
-    setListofRes(resList);
-    setfilteredRes(resList);
-    console.log(json);
+    setListofRes(json?.recipes);
+    setfilteredRes(json?.recipes);
+    console.log(json?.recipes);
   };
 
   return ListofRes?.length === 0 ? (
@@ -39,7 +40,7 @@ const Body = () => {
           className="m-2"
           onClick={() => {
             let filtered = ListofRes.filter((res) =>
-              res.data.name.toLowerCase().includes(searchText)
+              res.name.toLowerCase().includes(searchText)
             );
             setfilteredRes(filtered);
           }}
@@ -49,10 +50,8 @@ const Body = () => {
         <button
           className="m-2"
           onClick={() => {
-            let filteredData = ListofRes.filter(
-              (res) => res.data.avgRating > 4
-            );
-            setListofRes(filteredData);
+            const filteredData = ListofRes.filter((res) => res.rating >= 4.8);
+            setfilteredRes(filteredData);
           }}
         >
           Top Restaurants
@@ -60,7 +59,9 @@ const Body = () => {
       </div>
       <div className="res-container">
         {filteredRes.map((restaurant) => (
-          <RestaurantCard key={restaurant.data.id} resData={restaurant} />
+          <Link key={restaurant.id} to={`/restaurant/${restaurant.id}`}>
+            <RestaurantCard key={restaurant.id} resData={restaurant} />
+          </Link>
         ))}
       </div>
     </div>

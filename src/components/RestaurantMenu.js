@@ -1,22 +1,52 @@
 import { useState, useEffect } from "react";
+import Shimmer from "./Shimmer";
+import { useParams } from "react-router";
+import { MENU_URL } from "../utils/constants";
 
 const RestaurantMenu = () => {
+  const [resMenu, setResMenu] = useState([]);
+
+  const { resId } = useParams();
+  console.log(resId);
+
   useEffect(() => {
     resApi();
   }, []);
 
   const resApi = async () => {
-    const fetchData = await fetch("https://dummyjson.com/recipes");
+    const fetchData = await fetch(`${MENU_URL}${resId}`);
     const json = await fetchData.json();
-    console.log(json);
+    setResMenu(json);
   };
+  const {
+    name,
+    cuisine,
+    caloriesPerServing,
+    ingredients,
+    instructions,
+    image,
+  } = resMenu;
+  console.log("res", resMenu);
+
   return (
     <>
-      <div>
-        <h1>Name of the Restaurant</h1>
-        <h2>Cusinies</h2>
-        <h3>Price for 3</h3>
-      </div>
+      {resMenu?.length < 0 ? (
+        <Shimmer />
+      ) : (
+        <div>
+          <h1>{name}</h1>
+          <img src={image} style={{ width: "100px", height: "100px" }} />
+          <h2>{cuisine}</h2>
+          <h3>
+            {caloriesPerServing}-{ingredients?.join(",")}
+          </h3>
+          <ul>
+            {instructions?.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </>
   );
 };
