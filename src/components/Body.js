@@ -26,24 +26,29 @@ const Body = () => {
   };
 
   if (online === false) {
-    return <h1>You are offline, Please check your internet connection!!</h1>;
+    return (
+      <h1 style={{ textAlign: "center", marginTop: "100px" }}>
+        You are offline, Please check your internet connection!!
+      </h1>
+    );
   }
 
   return ListofRes?.length === 0 ? (
     <Shimmer />
   ) : (
-    <div className="body">
-      <div className="search-container">
+    <div className="filter flex flex-wrap justify-center">
+      <div className="search m-4 p-4">
         <input
           type="text"
           placeholder="Search Food or Restaurant"
+          className="searchBox border border-solid border-black p-2 w-60"
           value={searchText}
           onChange={(e) => {
             setSearchText(e.target.value);
           }}
         />
         <button
-          className="m-2"
+          className="px-4 py-2 bg-green-100 m-4 rounded-lg"
           onClick={() => {
             let filtered = ListofRes.filter((res) =>
               res.name.toLowerCase().includes(searchText)
@@ -54,7 +59,7 @@ const Body = () => {
           Search
         </button>
         <button
-          className="m-2"
+          className="px-4 py-2 bg-gray-100 m-4 rounded-lg"
           onClick={() => {
             const filteredData = ListofRes.filter((res) => res.rating >= 4.8);
             setfilteredRes(filteredData);
@@ -63,7 +68,7 @@ const Body = () => {
           Top Restaurants
         </button>
       </div>
-      <div className="res-container">
+      <div className="flex flex-wrap justify-center">
         {filteredRes.map((restaurant) => (
           <Link key={restaurant.id} to={`/restaurant/${restaurant.id}`}>
             <RestaurantCard key={restaurant.id} resData={restaurant} />
