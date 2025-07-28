@@ -1,6 +1,6 @@
 import React, { use, useEffect } from "react";
 import { resList } from "../utils/mockData";
-import RestaurantCard from "./RestaurantCard";
+import RestaurantCard, { withDifficultlyLevel } from "./RestaurantCard";
 import { useState } from "react";
 import { resList } from "../utils/mockData";
 import Shimmer from "./Shimmer";
@@ -12,6 +12,8 @@ const Body = () => {
   const [filteredRes, setfilteredRes] = useState([]);
   const [searchText, setSearchText] = useState("");
   const online = useOnlineStatus();
+
+  const DifficultyRestaurantCard = withDifficultlyLevel(RestaurantCard);
 
   useEffect(() => {
     fetchData();
@@ -71,7 +73,14 @@ const Body = () => {
       <div className="flex flex-wrap justify-center">
         {filteredRes.map((restaurant) => (
           <Link key={restaurant.id} to={`/restaurant/${restaurant.id}`}>
-            <RestaurantCard key={restaurant.id} resData={restaurant} />
+            {restaurant?.difficulty === "Medium" ? (
+              <DifficultyRestaurantCard
+                key={restaurant.id}
+                resData={restaurant}
+              />
+            ) : (
+              <RestaurantCard key={restaurant.id} resData={restaurant} />
+            )}
           </Link>
         ))}
       </div>

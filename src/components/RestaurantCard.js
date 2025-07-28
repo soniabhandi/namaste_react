@@ -15,3 +15,16 @@ const RestaurantCard = ({ resData }) => {
   );
 };
 export default RestaurantCard;
+
+export const withDifficultlyLevel = (RestaurantCard) => {
+  return (props) => {
+    return (
+      <>
+        <label className="bg-black text-white rounded-lg p-2 m-2">
+          Difficulty Level
+        </label>
+        <RestaurantCard {...props} />
+      </>
+    );
+  };
+};
